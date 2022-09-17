@@ -72,6 +72,33 @@ void Main()
 						}
 					);
 	results.Dump();
+	
+	// September 16
+	// List all albums that are from 1990,
+	// Display the album title and artist name.
+	// For each album, display it's tracks
+	
+	var albumTracks = Albums
+						.Where ( x => x.ReleaseYear == 1990 )
+						.Select ( x => new {
+						
+						Title = x.Title,
+						Artist = x.Artist.Name,	// Navigational property to get the artist name.
+												// The Artist is the FK of the Table Albums
+						Tracks = x.Tracks
+									.Select (y => new {		//	Sub-query
+										Song = y.Name,
+										Genre = y.Genre.Name	// The collection Tracks has a parent table of Genre (FK)
+																// Since we need the genre name, we need to go up
+																// It is important to understand the ERD and which data is needed.
+									})
+						
+						});
+						
+	albumTracks.Dump();
+	
+	
+	// END September 16
 
 }
 
