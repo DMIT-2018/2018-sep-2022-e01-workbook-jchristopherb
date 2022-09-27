@@ -1,0 +1,22 @@
+September 26th
+
+Transactions
+    - a transaction changes the contents of a table/records
+
+DAL Commands
+    - Insert, Update, Delete
+
+Single Change
+    - command
+    - worked/not
+Multiple Changes
+    - if multiple commands
+    - determine commit/rollback
+    - can have 1 commit but many rollbacks (1 rollbacks executed)
+
+Business Logi Service Method (BLL)
+Method signature - data coming in
+*anytime we have an error we throw exception
+What happens when trow exception inside the method? Where do we go?
+    - END of the method (return)
+*anything savechanges done are still on staging(ade, edit,delete)
