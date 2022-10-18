@@ -43,7 +43,7 @@ void Main()
 		// On the web page, the post method would have have access to the BindProperty variables
 		//		containing the input values.
 		playlistname = "hansenbtest";
-		int trackid = 793;
+		int trackid = 325;
 		
 		// call the service method to process the data
 		PlaylistTrack_AddTrack(playlistname, username, trackid);
@@ -161,8 +161,8 @@ void PlaylistTrack_AddTrack(string playlistname, string username, int trackid)
 {
 	// locals
 	Tracks trackexist = null;
-	Playlists playlistexist = null;
-	PlaylistTracks playlisttrackexist = null;
+	Playlists playlistexists = null;
+	PlaylistTracks playlisttrackexists = null;
 	int tracknumber = 0;
 	
 	if (string.IsNullOrWhiteSpace(playlistname))
@@ -186,27 +186,27 @@ void PlaylistTrack_AddTrack(string playlistname, string username, int trackid)
 	
 	// query to check and see if playlist exist
 	// Business Rule: Playlist names must be unique within a user
-	playlistexist = Playlists
+	playlistexists = Playlists
 						.Where(x => x.Name.Equals(playlistname)
 						&& x.UserName.Equals(username))
 						.Select(x => x)
 						.FirstOrDefault();
 						
-	if (playlistexist == null)
+	if (playlistexists == null)
 	{
-		playlistexist = new Playlists()
+		playlistexists = new Playlists()
 		{
 			Name = playlistname,
 			UserName = username
 		};
 		// staging the new playlist record
-		Playlists.Add(playlistexist);
+		Playlists.Add(playlistexists);
 		tracknumber = 1;
 	}
 	else
 	{
 		// Business Rule: a track may only exist once on a playlist
-		playlisttrackexist = PlaylistTracks
+		playlisttrackexists = PlaylistTracks
 								.Where(x => x.Playlist.Name.Equals(playlistname)
 								&& x.Playlist.UserName.Equals(username)
 								&& x.TrackId == trackid)
@@ -214,13 +214,12 @@ void PlaylistTrack_AddTrack(string playlistname, string username, int trackid)
 								.Select(x => x)
 								.FirstOrDefault();
 								
-		if (playlisttrackexist == null)
+		if (playlisttrackexists == null)
 		{
 			// generate the next tracknumber
 			tracknumber = PlaylistTracks
 							.Where(x => x.Playlist.Name.Equals(playlistname)
-									&& x.Playlist.UserName.Equals(username)
-									&& x.TrackId == trackid)
+									&& x.Playlist.UserName.Equals(username))
 							.Count();
 			tracknumber++;
 		}
@@ -235,13 +234,58 @@ void PlaylistTrack_AddTrack(string playlistname, string username, int trackid)
 	}
 	
 	// processing to stage the new track to the playlist
-	playlisttrackexist = new PlaylistTracks();
+	playlisttrackexists = new PlaylistTracks();
 	
 	// load the data to the new instance of playlist track
-	playlisttrackexist.TrackNumber = tracknumber;
-	playlisttrackexist.TrackId = trackid;
+	playlisttrackexists.TrackNumber = tracknumber;
+	playlisttrackexists.TrackId = trackid;
 	
 	
+	/**************************************************************************
+	
+	?? What about the second part of the primary key: PlaylistId
+		if the playlist exists, then we know the ID:
+				playlistexists.PlaylistId
+				
+	in the situation of a NEW playlist, even though we have created the
+		playlist instance (see above), it is ONLY staged !!
+		
+	this means that the actual sql is NOT yet been created
+	this means that the IDENTITY value for the new playlist DOES NOT yet
+		exists. The value of the playlist instance (playlistexists) is zero.
+	thus, we have a serious problem.
+	
+	SOLUTION:
+	it is built into EntityFrameworj sofware and is based on using the
+		navigational property in Playlist pointing to its "child"
+		
+	staging a typical Add in the past was to reference the entity and
+		use the entity.Add( xxxx )
+		_context.PlaylistTrack.Add( xxxx )	[_context. is context instance in VS]
+	IF you use this statement, the playlistid would be aero (0)
+		causing your transaction to ABORT
+		
+	INSTEAD, do the staging using the syntax of "parent.navigatinalproperty.Add( xxxxx )"
+	playlistexist will be filled with either:
+		scenario A) a new staged instance
+		scenario B) a copy of the existing playlist instance
+	**************************************************************************/
+	
+	playlistexists.PlaylistTracks.Add(playlisttrackexists);
+
+	/**************************************************************************
+	
+	Staging is complete.
+	Commit the work (transaction)
+	Commiting the work needs a .SaveChanges()
+	A transaction has ONLY ONE .SaveChanges()
+	IF the SaveChanges() fails then all staged work being handled by the SaveChanges
+		is rollback.
+	
+	**************************************************************************/
+	
+	SaveChanges();
+
 }
 
 #endregion
