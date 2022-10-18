@@ -50,6 +50,7 @@ void Main()
 
 		// Once the service method is complete, the webpage would refresh (updating the playlist)
 		playlist = PlaylistTrack_FetchPlaylist(playlistname, username);
+		playlist.Dump();
 
 	}
 	catch (ArgumentNullException ex)
