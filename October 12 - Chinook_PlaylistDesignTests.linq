@@ -42,11 +42,42 @@ void Main()
 		
 		// On the web page, the post method would have have access to the BindProperty variables
 		//		containing the input values.
-		playlistname = "hansenbtest";
-		int trackid = 325;
+		//playlistname = "hansenbtest";
+		//int trackid = 325;
 		
 		// call the service method to process the data
-		PlaylistTrack_AddTrack(playlistname, username, trackid);
+		//PlaylistTrack_AddTrack(playlistname, username, trackid); tested and done
+		
+		// Added For Remove Transaction
+		// on the webpage, the post method would have already have access to the 
+		//	BindProperty variables coming the input variables
+
+		playlistname = "hansenbtest";
+		List<PlaylistTrackTRX> tracklistinfo = new List<PlaylistTrackTRX>();
+		tracklistinfo.Add(new PlaylistTrackTRX()
+		{
+			SelectedTrack = true,
+			TrackId = 793,
+			TrackNumber = 1,
+			TrackInput =0
+		})
+		tracklistinfo.Add(new PlaylistTrackTRX()
+		{
+			SelectedTrack = true,
+			TrackId = 543,
+			TrackNumber = 1,
+			TrackInput = 0
+		})
+		tracklistinfo.Add(new PlaylistTrackTRX()
+		{
+			SelectedTrack = true,
+			TrackId = 822,
+			TrackNumber = 1,
+			TrackInput = 0
+		})
+
+		// call the service method to process the data
+		PlaylistTrack_RemoveTracks(playlistname, username, tracklistinfo);
 
 		// Once the service method is complete, the webpage would refresh (updating the playlist)
 		playlist = PlaylistTrack_FetchPlaylist(playlistname, username);
@@ -70,7 +101,7 @@ void Main()
 
 // You can define other methods, fields, classes and namespaces here
 
-#region CQRS Queries
+#region CQRS Queries/ Command Models
 public class TrackSelection
 {
 	public int TrackId { get; set; }
@@ -86,6 +117,14 @@ public class PlaylistTrackInfo
 	public int TrackNumber { get; set; }
 	public string SongName { get; set; }
 	public int Milliseconds { get; set; }
+}
+
+public class PlaylistTrackTRX
+{
+	public bool SelectedTrack { get; set; }
+	public int TrackId { get; set; }
+	public int TrackNumber { get; set; }
+	public int TrackInput { get; set; }
 }
 #endregion
 
@@ -286,6 +325,45 @@ void PlaylistTrack_AddTrack(string playlistname, string username, int trackid)
 	
 	SaveChanges();
 
+}
+
+// Remove Method
+public void PlaylistTrack_RemoveTracks(string playlistname, string username, List<PlaylistTrackTRX>tracklistinfo)
+{
+	// local variables
+	Playlists playlistexists = null;
+	
+	if (string.IsNullOrWhiteSpace(playlistname))
+	{
+		throw new ArgumentNullException("No playlist name submitted.");
+	}
+	if (string.IsNullOrWhiteSpace(username))
+	{
+		throw new ArgumentNullException("No user name submitted.");
+	}
+	
+	// count items on the collection
+	var count = tracklistinfo.Count();
+	if (count == 0)
+	{
+		throw new ArgumentNullException("No list of tracks were submitted.");
+	}
+
+	// check playlist exists
+	playlistexists = Playlists
+						.Where(x => x.Name.Equals(playlistname)
+						&& x.UserName.Equals(username))
+						.Select(x => x)
+						.FirstOrDefault();
+						
+	if (playlistexists == null)
+	{
+		throw new ArgumentNullException($"Playlist {playlistname} does not exists for this user.");
+	}
+	else
+	{
+		
+	}
 }
 
 #endregion
