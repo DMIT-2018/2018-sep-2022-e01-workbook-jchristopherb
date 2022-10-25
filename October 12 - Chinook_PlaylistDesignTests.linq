@@ -480,32 +480,39 @@ public void PlaylistTrack_MoveTracks(string playlistname, string username,
 	}
 	else
 	{
-		//obtain the tracks to keep
-		//the SelectedTrack is a boolean field
-		//	false: keep
-		//	true : remove
-		//create a query to extract the "keep" tracks from the incoming data
-		IEnumerable<PlaylistTrackTRX> keeplist = tracklistinfo
-												.Where(x => !x.SelectedTrack)
-												.OrderBy(x => x.TrackNumber);
-		//obtain the tracks to remove
-		IEnumerable<PlaylistTrackTRX> removelist = tracklistinfo
-												.Where(x => x.SelectedTrack);
-
-		// test for re-sequencing
-		foreach (PlaylistTrackTRX item in removelist)
+		// SORTING START
+		// sort the command midek data list on the re-org value in ASC order (comparing x to y)
+		// 		a DESC order comparing y to x
+		tracklistinfo.Sort((x,y) => x.TrackInput.CompareTo(y.TrackInput));
+		// SORTING END
+		
+		// A validation loop to check that the data is indeed a positive number
+		// Use int.TryParse to check that the value to be tested is a number
+		// check the result of the tryparse against the value 1 9should be a positive number)
+		int tempnum = 0;
+		foreach (var track in tracklistinfo)
 		{
-			playlisttrackexists = PlaylistTracks
-								.Where(x => x.Playlist.Name.Equals(playlistname)
-										&& x.Playlist.UserName.Equals(username)
-										&& x.TrackId == item.TrackId)
-								.FirstOrDefault();
-			if (playlisttrackexists != null)
+			// 
+			var songname = Tracks
+							.Where(x => x.TrackId == track.TrackId)
+							.Select(x => x.Name)
+							.SingleOrDefault();
+			if (int.TryParse(track.TrackInput.ToString(), out tempnum))
 			{
-				PlaylistTracks.Remove(playlisttrackexists);
+				if (tempnum < 1)
+				{
+					errorlist.Add(new Exception($"The track {songname} re-sequence value needs to be greater than 0."));
+				}
+				else
+				{
+				}
+			}
+			else 
+			{
+				errorlist.Add(new Exception($"The track {songname} re-sequence value needs to be a number. Example: 3"));
 			}
 		}
-
+		
 		tracknumber = 1;
 		foreach (PlaylistTrackTRX item in keeplist)
 		{
