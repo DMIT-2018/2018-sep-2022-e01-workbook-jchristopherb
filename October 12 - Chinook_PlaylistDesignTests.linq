@@ -480,13 +480,8 @@ public void PlaylistTrack_MoveTracks(string playlistname, string username,
 	}
 	else
 	{
-		// SORTING START
-		// sort the command midek data list on the re-org value in ASC order (comparing x to y)
-		// 		a DESC order comparing y to x
-		tracklistinfo.Sort((x,y) => x.TrackInput.CompareTo(y.TrackInput));
-		// SORTING END
 		
-		// A validation loop to check that the data is indeed a positive number
+		// A) validation loop to check that the data is indeed a positive number
 		// Use int.TryParse to check that the value to be tested is a number
 		// check the result of the tryparse against the value 1 9should be a positive number)
 		int tempnum = 0;
@@ -503,18 +498,45 @@ public void PlaylistTrack_MoveTracks(string playlistname, string username,
 				{
 					errorlist.Add(new Exception($"The track {songname} re-sequence value needs to be greater than 0."));
 				}
-				else
-				{
-				}
 			}
 			else 
 			{
 				errorlist.Add(new Exception($"The track {songname} re-sequence value needs to be a number. Example: 3"));
 			}
 		}
+		// SORTING START
+		// sort the command midek data list on the re-org value in ASC order (comparing x to y)
+		// 		a DESC order comparing y to x
+		tracklistinfo.Sort((x, y) => x.TrackInput.CompareTo(y.TrackInput));
+		// SORTING END
+
+		// B) unique new track numbers
+		// the collection has been sorted in ascending order, therefore the next number must be
+		//		equal to or greater than the previous number.
+		// one could check to see if the next number is +1 of the previous number BUT
+		//		the re-org loop which does the actual re-sequence of the number will handle that situation.
+		// Therefore, both "holes" in tis loop does not matter (logically)
+		
+		for (int i = 0; i < tracklistinfo.Count - 1; i++)
+		// the (tracklistinfo.Count - 1) stops the comparisson bet i and the next record
+		{
+			var songname1 = Tracks
+							.Where(x => x.TrackId == tracklistinfo[i].TrackId)
+							.Select(x => x.Name)
+							.SingleOrDefault();
+			var songname2 = Tracks
+							.Where(x => x.TrackId == tracklistinfo[i + 1].TrackId)
+							.Select(x => x.Name)
+							.SingleOrDefault();
+			
+			if (tracklistinfo[i].TrackInput == tracklistinfo[i + 1].TrackInput)
+			{
+				errorlist.Add(new Exception($"{songname1} and {songname2} have the same re-sequence value. Re-seuqence numbers MUST be unique"));
+			}
+		}
 		
 		tracknumber = 1;
-		foreach (PlaylistTrackTRX item in keeplist)
+		foreach (PlaylistTrackTRX item in tracklistinfo)
 		{
 			playlisttrackexists = PlaylistTracks
 								.Where(x => x.Playlist.Name.Equals(playlistname)
@@ -547,7 +569,7 @@ public void PlaylistTrack_MoveTracks(string playlistname, string username,
 	}
 	if (errorlist.Count > 0)
 	{
-		throw new AggregateException("Unable to remove request tracks. Check concerns", errorlist);
+		throw new AggregateException("Unable to re-sequence tracks. Check concerns", errorlist);
 	}
 	else
 	{
