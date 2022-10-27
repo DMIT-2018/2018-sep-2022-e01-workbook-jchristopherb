@@ -14,22 +14,6 @@
   </Connection>
 </Query>
 
-<Query Kind="Program">
-  <Connection>
-    <ID>a63a2725-90fa-4466-9c8e-9303687100ea</ID>
-    <NamingServiceVersion>2</NamingServiceVersion>
-    <Persist>true</Persist>
-    <Driver Assembly="(internal)" PublicKeyToken="no-strong-name">LINQPad.Drivers.EFCore.DynamicDriver</Driver>
-    <Server>.\MSSQLSERVER01</Server>
-    <DisplayName>Chinook-office</DisplayName>
-    <Database>Chinook</Database>
-    <DriverData>
-      <PreserveNumeric1>True</PreserveNumeric1>
-      <EFProvider>Microsoft.EntityFrameworkCore.SqlServer</EFProvider>
-    </DriverData>
-  </Connection>
-</Query>
-
 void Main()
 {
 	//Main is going to represent the web page 
