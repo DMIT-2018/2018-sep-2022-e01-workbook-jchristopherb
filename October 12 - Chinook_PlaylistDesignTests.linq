@@ -14,85 +14,38 @@
   </Connection>
 </Query>
 
+<Query Kind="Program">
+  <Connection>
+    <ID>a63a2725-90fa-4466-9c8e-9303687100ea</ID>
+    <NamingServiceVersion>2</NamingServiceVersion>
+    <Persist>true</Persist>
+    <Driver Assembly="(internal)" PublicKeyToken="no-strong-name">LINQPad.Drivers.EFCore.DynamicDriver</Driver>
+    <Server>.\MSSQLSERVER01</Server>
+    <DisplayName>Chinook-office</DisplayName>
+    <Database>Chinook</Database>
+    <DriverData>
+      <PreserveNumeric1>True</PreserveNumeric1>
+      <EFProvider>Microsoft.EntityFrameworkCore.SqlServer</EFProvider>
+    </DriverData>
+  </Connection>
+</Query>
+
 void Main()
 {
-	//Main is going to represent the web page post method
+	//Main is going to represent the web page 
 	try
 	{
-		//coded and tested the FetchTracksBy query
-		string searcharg ="Deep";
-		string searchby = "Artist";
-		List<TrackSelection> tracklist = Track_FetchTracksBy(searcharg, searchby);
-		//tracklist.Dump();
+		//Driver
+		//Test_TrackListQuery();
 		
-		//coded and tested the FetchPlaylist query
-		string playlistname ="hansenb1";
-		string username = "HansenB"; //this is an user name which will come from O/S via security
-		List<PlaylistTrackInfo> playlist = PlaylistTrack_FetchPlaylist(playlistname, username);
-		//playlist.Dump();
+		//Test_PlaylistQuery();
 		
-		//coded and tested the Add_Track trx
-		//the command method will receive no collection but will receive individual arguments
-		// trackid, playlistname, username
-		//test tracks
-		//793 A castle full of Rascals
-		//822 A Twist in the Tail
-		//543 Burn
-		//756 Child in Time
+		//Test_AddTrackTRX();
 		
-		//on the web page, the post method would have already have access to the
-		//  BindProperty variables containing the input values
-		//playlistname = "hansenbtest";
-		//int trackid = 756;
-
-		//call the service method to process the data
-		//PlaylistTrack_AddTrack(playlistname, username, trackid); //tested
+		//Test_RemoveTrackTRX();
 		
-		//on the web page, the post method would have already have access to the
-		//	BindProperty variables containing the input values
-		playlistname = "hansenbtest";
-		List<PlaylistTrackTRX> tracklistinfo = new List<PlaylistTrackTRX>();
-		
-		tracklistinfo.Add(new PlaylistTrackTRX()
-			{SelectedTrack = false,
-			 TrackId =543,
-			 TrackNumber= 1,
-			TrackInput = 6
-		});
-		
-		tracklistinfo.Add(new PlaylistTrackTRX()
-		{
-			SelectedTrack = false,
-			TrackId = 756,
-			TrackNumber = 2,
-			TrackInput = 99
-		});
-		
-		tracklistinfo.Add(new PlaylistTrackTRX()
-			{SelectedTrack = true,
-			 TrackId =822,
-			 TrackNumber= 3,
-			TrackInput = 8
-		});
-		
-		tracklistinfo.Add(new PlaylistTrackTRX()
-		{
-			SelectedTrack = true,
-			TrackId = 793,
-			TrackNumber = 4,
-			TrackInput = 2
-		});
-
-
-		//call the service method to process the data
-		//PlaylistTrack_RemoveTracks(playlistname, username, tracklistinfo); 
-		
-		//call the service method to process the data
-		PlaylistTrack_MoveTracks(playlistname, username, tracklistinfo);
-		
-		//once the service method is complete, the web page would refresh
-		playlist = PlaylistTrack_FetchPlaylist(playlistname, username);
-		playlist.Dump();
+		//Test_MoveTrackTRX();
+				
 	}
 	catch (ArgumentNullException ex)
 	{
@@ -120,32 +73,9 @@ void Main()
 
 // You can define other methods, fields, classes and namespaces here
 
-#region CQRS Queries/Command models
-public class TrackSelection
-{
-    public int TrackId {get; set;}
-    public string SongName {get; set;}
-    public string AlbumTitle{get; set;}
-    public string ArtistName{get; set;}
-    public int Milliseconds {get; set;}
-    public decimal Price {get; set;}
-}
-public class PlaylistTrackInfo 
-{
-    public int TrackId {get; set;}
-    public int TrackNumber {get; set;}
-    public string SongName {get; set;}
-    public int Milliseconds {get; set;}
-}
-public class PlaylistTrackTRX
-{
-    public bool SelectedTrack {get; set;}
-    public int TrackId {get; set;}
-    public int TrackNumber {get; set;}
-    public int TrackInput {get; set;}
-}
-#endregion
-
+//pretend to be the web application OnPost methods project
+#region Driver Methods
+//Driver Methods
 //general method to drill down into an exception of obtain the InnerException where your
 //  actual error is detailed
 
@@ -157,7 +87,165 @@ private Exception GetInnerException(Exception ex)
 }
 
 
+void Test_TrackListQuery()
+{
+	//coded and tested the FetchTracksBy query
+	string searcharg ="Deep";
+	string searchby = "Artist";
+	List<TrackSelection> tracklist = Track_FetchTracksBy(searcharg, searchby);
+	tracklist.Dump();
+	
+}
+
+void Test_PlaylistQuery()
+{
+	//coded and tested the FetchPlaylist query
+	string playlistname ="hansenb1";
+	string username = "HansenB"; //this is an user name which will come from O/S via security
+	List<PlaylistTrackInfo> playlist = PlaylistTrack_FetchPlaylist(playlistname, username);
+	playlist.Dump();
+}
+
+void Test_AddTrackTRX()
+{
+	//coded and tested the Add_Track trx
+	//the command method will receive no collection but will receive individual arguments
+	// trackid, playlistname, username
+	//test tracks
+	//543 Burn
+	//756 Child in Time
+	//822 A Twist in the Tail
+	//793 A castle full of Rascals
+
+	//on the web page, the post method would have already have access to the
+	//  BindProperty variables containing the input values
+	string playlistname = "hansenbtest";
+	string username = "HansenB";
+	int trackid = 793;
+
+	//call the service method to process the data
+	PlaylistTrack_AddTrack(playlistname, username, trackid); 
+
+	//once the service method is complete, the web page would refresh
+	var playlist = PlaylistTrack_FetchPlaylist(playlistname, username);
+	playlist.Dump();
+}
+
+void Test_RemoveTrackTRX()
+{
+	//on the web page, the post method would have already have access to the
+	//	BindProperty variables containing the input values
+	string playlistname = "hansenbtest";
+	string username = "HansenB";
+	List<PlaylistTrackTRX> tracklistinfo = new List<PlaylistTrackTRX>();
+	tracklistinfo.Add(new PlaylistTrackTRX()
+	{
+		SelectedTrack = false,
+		TrackId = 543,
+		TrackNumber = 1,
+		TrackInput = 0
+	});
+	tracklistinfo.Add(new PlaylistTrackTRX()
+	{
+		SelectedTrack = true,
+		TrackId = 756,
+		TrackNumber = 2,
+		TrackInput = 0
+	});
+	tracklistinfo.Add(new PlaylistTrackTRX()
+	{
+		SelectedTrack = true,
+		TrackId = 822,
+		TrackNumber = 3,
+		TrackInput = 0
+	});
+	tracklistinfo.Add(new PlaylistTrackTRX()
+	{
+		SelectedTrack = false,
+		TrackId = 793,
+		TrackNumber = 4,
+		TrackInput = 0
+	});
+
+	//call the service method to process the data
+	PlaylistTrack_RemoveTracks(playlistname, username, tracklistinfo);
+	//once the service method is complete, the web page would refresh
+	var playlist = PlaylistTrack_FetchPlaylist(playlistname, username);
+	playlist.Dump();
+}
+
+void Test_MoveTrackTRX()
+{
+	//on the web page, the post method would have already have access to the
+	//	BindProperty variables containing the input values
+	string playlistname = "hansenbtest";
+	string username = "HansenB";
+	List<PlaylistTrackTRX> tracklistinfo = new List<PlaylistTrackTRX>();
+	tracklistinfo.Add(new PlaylistTrackTRX()
+	{
+		SelectedTrack = false,
+		TrackId = 543,
+		TrackNumber = 1,
+		TrackInput = 6
+	});
+	tracklistinfo.Add(new PlaylistTrackTRX()
+	{
+		SelectedTrack = false,
+		TrackId = 756,
+		TrackNumber = 2,
+		TrackInput = 99
+	});
+	tracklistinfo.Add(new PlaylistTrackTRX()
+	{
+		SelectedTrack = false,
+		TrackId = 822,
+		TrackNumber = 3,
+		TrackInput = 8
+	});
+	tracklistinfo.Add(new PlaylistTrackTRX()
+	{
+		SelectedTrack = false,
+		TrackId = 793,
+		TrackNumber = 4,
+		TrackInput = 2
+	});
+
+	//call the service method to process the data
+	PlaylistTrack_MoveTracks(playlistname, username, tracklistinfo);
+	//once the service method is complete, the web page would refresh
+	var playlist = PlaylistTrack_FetchPlaylist(playlistname, username);
+	playlist.Dump();
+}
+
+#endregion
+
 //pretend to be the class library project
+#region CQRS Queries/Command models
+public class TrackSelection
+{
+	public int TrackId { get; set; }
+	public string SongName { get; set; }
+	public string AlbumTitle { get; set; }
+	public string ArtistName { get; set; }
+	public int Milliseconds { get; set; }
+	public decimal Price { get; set; }
+}
+public class PlaylistTrackInfo
+{
+	public int TrackId { get; set; }
+	public int TrackNumber { get; set; }
+	public string SongName { get; set; }
+	public int Milliseconds { get; set; }
+}
+public class PlaylistTrackTRX
+{
+	public bool SelectedTrack { get; set; }
+	public int TrackId { get; set; }
+	public int TrackNumber { get; set; }
+	public int TrackInput { get; set; }
+}
+#endregion
+
 #region TrackServices class
 public List<TrackSelection> Track_FetchTracksBy(string searcharg, string searchby)
 {
@@ -384,8 +472,8 @@ public void PlaylistTrack_RemoveTracks(string playlistname, string username,
 		//obtain the tracks to remove
 		IEnumerable<PlaylistTrackTRX> removelist = tracklistinfo
 												.Where(x => x.SelectedTrack);
-
-		foreach (PlaylistTrackTRX item in removelist)
+		
+		foreach(PlaylistTrackTRX item in removelist)
 		{
 			playlisttrackexists = PlaylistTracks
 								.Where(x => x.Playlist.Name.Equals(playlistname)
@@ -397,9 +485,9 @@ public void PlaylistTrack_RemoveTracks(string playlistname, string username,
 				PlaylistTracks.Remove(playlisttrackexists);
 			}
 		}
-
-		tracknumber = 1;
-		foreach (PlaylistTrackTRX item in keeplist)
+		
+		tracknumber= 1;
+		foreach(PlaylistTrackTRX item in keeplist)
 		{
 			playlisttrackexists = PlaylistTracks
 								.Where(x => x.Playlist.Name.Equals(playlistname)
@@ -410,11 +498,11 @@ public void PlaylistTrack_RemoveTracks(string playlistname, string username,
 			{
 				playlisttrackexists.TrackNumber = tracknumber;
 				PlaylistTracks.Update(playlisttrackexists);
-
+				
 				//this library is not directly accessable by linqpad
 				//EntityEntry<PlaylistTracks> updating = _context.Entry(playlisttrackexists);
 				//updating.State = Microsoft.EntityFrameworkCore.EntityState.Modify;
-
+				
 				//get ready for next track
 				tracknumber++;
 			}
@@ -422,13 +510,13 @@ public void PlaylistTrack_RemoveTracks(string playlistname, string username,
 			{
 				var songname = Tracks
 							.Where(x => x.TrackId == item.TrackId)
-							.Select(x => x.Name)
+							.Select( x => x.Name)
 							.SingleOrDefault();
 				errorlist.Add(new Exception($"The track ({songname}) is no longer on file. Please Remove"));
 			}
 		}
-
-
+		
+		
 	}
 	if (errorlist.Count > 0)
 	{
@@ -440,19 +528,18 @@ public void PlaylistTrack_RemoveTracks(string playlistname, string username,
 		SaveChanges();
 	}
 }
-
-public void PlaylistTrack_MoveTracks(string playlistname, string username,
+	
+public void PlaylistTrack_MoveTracks(string playlistname, string username, 
 				List<PlaylistTrackTRX> tracklistinfo)
 {
 	//local variables
 	Playlists playlistexists = null;
 	PlaylistTracks playlisttrackexists = null;
 	int tracknumber = 0;
-
+	
 	//we need a container to hold x number of Exception messages
 	List<Exception> errorlist = new List<Exception>();
-
-	// test if data is coming in
+	
 	if (string.IsNullOrWhiteSpace(playlistname))
 	{
 		throw new ArgumentNullException("No playlist name submitted");
@@ -461,14 +548,13 @@ public void PlaylistTrack_MoveTracks(string playlistname, string username,
 	{
 		throw new ArgumentNullException("No user name submitted");
 	}
-
+	
 	var count = tracklistinfo.Count();
 	if (count == 0)
 	{
 		throw new ArgumentNullException("No list of tracks were submitted");
 	}
-
-	// test if playlist exist
+	
 	playlistexists = Playlists
 						.Where(x => x.Name.Equals(playlistname)
 								&& x.UserName.Equals(username))
@@ -480,45 +566,45 @@ public void PlaylistTrack_MoveTracks(string playlistname, string username,
 	}
 	else
 	{
-		
-		// A) validation loop to check that the data is indeed a positive number
-		// Use int.TryParse to check that the value to be tested is a number
-		// check the result of the tryparse against the value 1 9should be a positive number)
+			
+		//validation loop to check that the data is indeed a postive number
+		//use int.TryParse to check that the value to be tested is a number
+		//check the result of tryparse against the value 1
 		int tempnum = 0;
 		foreach (var track in tracklistinfo)
 		{
-			// 
 			var songname = Tracks
 							.Where(x => x.TrackId == track.TrackId)
-							.Select(x => x.Name)
+							.Select( x => x.Name)
 							.SingleOrDefault();
-			if (int.TryParse(track.TrackInput.ToString(), out tempnum))
+			if(int.TryParse(track.TrackInput.ToString(), out tempnum))
 			{
 				if (tempnum < 1)
 				{
-					errorlist.Add(new Exception($"The track {songname} re-sequence value needs to be greater than 0."));
+					errorlist.Add(new Exception($"The track ({songname}) re-sequence value needs to be greater than 0. Example: 3"));
+
 				}
+				
 			}
-			else 
+			else
 			{
-				errorlist.Add(new Exception($"The track {songname} re-sequence value needs to be a number. Example: 3"));
+				errorlist.Add(new Exception($"The track ({songname}) re-sequence value needs to be a number. Example: 3"));
 			}
 		}
-		// SORTING START
-		// sort the command midek data list on the re-org value in ASC order (comparing x to y)
-		// 		a DESC order comparing y to x
-		tracklistinfo.Sort((x, y) => x.TrackInput.CompareTo(y.TrackInput));
-		// SORTING END
-
-		// B) unique new track numbers
-		// the collection has been sorted in ascending order, therefore the next number must be
-		//		equal to or greater than the previous number.
-		// one could check to see if the next number is +1 of the previous number BUT
-		//		the re-org loop which does the actual re-sequence of the number will handle that situation.
-		// Therefore, both "holes" in tis loop does not matter (logically)
 		
+		//sort the command model data list on the re-org value
+		//	in ascending order  comparing x to y
+		//   a descending order comparing y to x
+		tracklistinfo.Sort((x,y) => x.TrackInput.CompareTo(y.TrackInput));
+
+		//b) unique new track numbers
+		// the collection has been sorted in ascending order therefore the next
+		//		number must be equal to or greater than the previous number
+		// one could check to see if the next number is +1 of the previou number
+		//		BUT the re-org loop which does the actual re-sequence of numbers
+		//		will have that situation.
+		//		Therefore "holes" in this loop does not matter (logically)
 		for (int i = 0; i < tracklistinfo.Count - 1; i++)
-		// the (tracklistinfo.Count - 1) stops the comparisson bet i and the next record
 		{
 			var songname1 = Tracks
 							.Where(x => x.TrackId == tracklistinfo[i].TrackId)
@@ -528,13 +614,13 @@ public void PlaylistTrack_MoveTracks(string playlistname, string username,
 							.Where(x => x.TrackId == tracklistinfo[i + 1].TrackId)
 							.Select(x => x.Name)
 							.SingleOrDefault();
-			
 			if (tracklistinfo[i].TrackInput == tracklistinfo[i + 1].TrackInput)
 			{
-				errorlist.Add(new Exception($"{songname1} and {songname2} have the same re-sequence value. Re-seuqence numbers MUST be unique"));
+				errorlist.Add(new Exception($"{songname1} and {songname2} have the same re-sequence value. Re-sequence numbers must be unique"));
 			}
 		}
-		
+
+
 		tracknumber = 1;
 		foreach (PlaylistTrackTRX item in tracklistinfo)
 		{
@@ -579,7 +665,6 @@ public void PlaylistTrack_MoveTracks(string playlistname, string username,
 }
 
 #endregion
-
 
 
 
