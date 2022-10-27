@@ -1,0 +1,25 @@
+Visual Studio 2022
+
+1.Create a project: c# Windows Web
+		   Add project name,
+		   change location,
+		   Add Solution Name: ChinookMusic
+		Next:
+		   Framework: Long-term
+		   Authentiction  Type: Individual Account
+
+2. Right click on Solution > Add > New Project
+ Library > Select "Class Lirary" > Next > Create
+
+3. Create folders: Right Click on Project (ChinookSystem) > Add > New Folder
+	- BLL
+	- DAL
+	- Entities
+	- ViewModels
+4. Add dummy file to all folders
+	- right click > Add > New Item > Textfile
+
+5. Bring in the database:
+	a.Reverse Engineering entities:
+		- 
+	b. Install EF Core Power Tools: Extensions > Manage Extensions > Search EF Core Power Tools
