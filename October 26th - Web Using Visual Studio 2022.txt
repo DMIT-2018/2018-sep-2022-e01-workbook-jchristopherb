@@ -9,7 +9,7 @@ Visual Studio 2022
 		   Authentiction  Type: Individual Account
 
 2. Right click on Solution > Add > New Project
- Library > Select "Class Lirary" > Next > Create
+ Library > Select "Class Library" > Next > Create
 
 3. Create folders: Right Click on Project (ChinookSystem) > Add > New Folder
 	- BLL
@@ -38,7 +38,7 @@ Visual Studio 2022
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-Using the cisual studio code manually:
+Using the visual studio code manually:
 
 1. WebApp > Dependencies > Right CLick and Add Project References > check off Chinook
 2. Tools > Nuget Package Manager > Package Manager Console
@@ -53,3 +53,4 @@ Using the cisual studio code manually:
 9. On your class library (ChinookSystem) > Depensencies > Right Click on "Packages", Browse for "microsoft.EntityFrameworkCore.sqlserver" and install it.
 10. On the WebApp > Dependencies > Right click on Package > Update
 11. Right Click on your Solution and Build.
+12. Delete the dummy files on the DAL and Entities Folders.
