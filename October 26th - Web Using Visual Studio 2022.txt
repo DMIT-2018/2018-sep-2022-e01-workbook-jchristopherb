@@ -16,10 +16,22 @@ Visual Studio 2022
 	- DAL
 	- Entities
 	- ViewModels
+
 4. Add dummy file to all folders
 	- right click > Add > New Item > Textfile
 
 5. Bring in the database:
-	a.Reverse Engineering entities:
-		- 
-	b. Install EF Core Power Tools: Extensions > Manage Extensions > Search EF Core Power Tools
+	a. Install EF Core Power Tools: Extensions > Manage Extensions > Search EF Core Power Tools
+	b.Reverse Engineering entities:
+		- Right click class library(ChinookSystem)
+		- EF Core Power Tools > Reverse Engineering > Add Connections
+		- server name should match the DB name
+		- test connection then press OK
+		- expand the table > select all tables
+	d. *Generate EF Core Model in Project ChinookSystem box will show
+		- Content name:
+		- Content namespace:
+		- Entities Type path: Entities
+		- DBContext path: DAL
+		- check off both naming, Use dataAnnotation, intsall the EF core provider package in the project
+
