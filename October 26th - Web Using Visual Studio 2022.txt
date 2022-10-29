@@ -54,3 +54,34 @@ Using the visual studio code manually:
 10. On the WebApp > Dependencies > Right click on Package > Update
 11. Right Click on your Solution and Build.
 12. Delete the dummy files on the DAL and Entities Folders.
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Adding Command Model
+1.Copy each class from Linqpad.
+2. On ViewModels Folder > Right click> Add Class
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Go to Context class and entities and make eveything internal (from public)
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Adding Libraries:
+
+1. On WebApp, go to wwwroot > lib and delete all libraries
+2. Right CLick lib folder > Add > Client Side Library
+	- provider: 	jsdelivr
+	- library: 	jquery@3.6.1
+			jquery-validation@1.19.5
+			jquery-validation-unobtrusive@4.0.0
+
+
+Update script file:
+1. On Webapp > Pages folder > Shared folder and open _ValidationScriptsPartial.cshtml
+2. Scripts should be this: (correct pathname)
+	<script src="~/lib/jquery/dist/jquery.js"></script>
+	<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
+
+
