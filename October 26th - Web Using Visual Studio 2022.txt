@@ -47,4 +47,9 @@ Using the cisual studio code manually:
 5. Run command to do reverse engineering:
 	- Copy the server name from the sql (WC320-14\SQLEXPRESS)
 	- Type in "Scaffold-DbContext 'Data Source=.\SQLEXPRESS;Initial Catalog=Chinook;Integrated Security=true' Microsoft.EntityFrameworkCore.SqlServer -o Entities"
-
+6. From the Entity Folder, copy the Context Class and paste on DAL and delete it on the Entity folder
+7. Change your namespace to ChinookSystem.DAL
+8. Add "using ChinookSystem.Entities;"
+9. On your class library (ChinookSystem) > Depensencies > Right Click on "Packages", Browse for "microsoft.EntityFrameworkCore.sqlserver" and install it.
+10. On the WebApp > Dependencies > Right click on Package > Update
+11. Right Click on your Solution and Build.
