@@ -33,5 +33,18 @@ Visual Studio 2022
 		- Content namespace:
 		- Entities Type path: Entities
 		- DBContext path: DAL
-		- check off both naming, Use dataAnnotation, intsall the EF core provider package in the project
+		- check off both boxes under Naming, Use dataAnnotation, intsall the EF core provider package in the project
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Using the cisual studio code manually:
+
+1. WebApp > Dependencies > Right CLick and Add Project References > check off Chinook
+2. Tools > Nuget Package Manager > Package Manager Console
+3. On console > change the default package to Chinook
+4. Type in "Install-Package Microsoft.EntityFrameworkCore.Tools" and press enter.
+5. Run command to do reverse engineering:
+	- Copy the server name from the sql (WC320-14\SQLEXPRESS)
+	- Type in "Scaffold-DbContext 'Data Source=.\SQLEXPRESS;Initial Catalog=Chinook;Integrated Security=true' Microsoft.EntityFrameworkCore.SqlServer -o Entities"
 
