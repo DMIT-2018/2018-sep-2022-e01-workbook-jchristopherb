@@ -1,0 +1,12 @@
+October 31st
+
+Project Deliverables Discussion:
+- For Project Deliverables, 3 milestones each and one for the entire group(then 1 issue per member).
+- 1 Linq file per member. Individual Reverse engineering DB and ONLY what's needed table.
+- Delegate tasks (ie. Create the Readme.md, Solution/Project, Layout/Navigation etc.)
+ 
+
+++++++++++++++++++++++++++++++++++++++++
+
+Finishing up general layout page:
+@PAges
