@@ -24,6 +24,21 @@
                 <li>
                     <a asp-area="" asp-page="/Index">Home</a>
                 </li>
+                @*
+                    Setup a submenu (dropdown menu) using Holiday.cs
+                    See holidaycss.js.org
+
+                    start with an li tag
+                    within :    add a span tag: entry on the menu root
+                                add ul tag: starts the dropdown menu
+                                within : add any number of li menu items
+                *@
+                <li>
+                    <span>Samples</span>
+                    <ul>
+                        <li><a asp-area="" asp-page="/SamplePages/Index">Default Sample Pages Home</a></li>
+                    </ul>
+                </li>
                 <li>
                     <a asp-area="" asp-page="/Privacy">Privacy</a>
                 </li>
