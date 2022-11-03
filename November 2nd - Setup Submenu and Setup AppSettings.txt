@@ -1,0 +1,16 @@
+November 2nd
+1. Adding images
+	- Add img folder on repo (workbook > ChinookMusic > WebApp > wwwroot > img)
+	- Add Image menu link on _Layout.cshtml
+2. Setup a submenu
+	- Go to Pages folder > Right click > Add > New Folder (name of folder should reflect the scenario ie Sales/Purchasing/Retail..etc)
+	- Right click on the new folder > Add > Razor Page > Razor Page Empty > Index.cshtml (*Note: This is different from the index.cshtml one-level up)
+	- Adding title and content to the new index.cshtml file
+3. Setup AppSettings
+	- Add another connection string:
+		"ChinookDB" : "Server=.\\SQLEXPRESS;Database=Chinook;Trusted_Connection=true;MultipleActiveResultSets=true"
+	- Add another GetConnectionString to reference our DB connectionString on Program.cs
+		var connectionStringChinook = builder.Configuration.GetConnectionString("ChinookDB");
+	- Add the extension method requires a parameter options.UseSqlServer(xxxx) where the xxxx is the conenction string variable
+		builder.Services.ChinookSystemBackendDependencies(options =>
+    options.UseSqlServer(connectionStringChinook));
