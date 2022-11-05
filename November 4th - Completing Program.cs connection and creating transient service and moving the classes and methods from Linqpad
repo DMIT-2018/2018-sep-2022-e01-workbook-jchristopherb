@@ -46,6 +46,15 @@ On the Project, each member should have their own builder statement (backend dep
 	- remove "s" to all instance, local variables
 	- add #nullable disable on top of your using statements
 
-	
+======================================================================
+In moodle, download the Basic Controls.zip, extract it. Copy the files over ~\ChinookMusic\WebApp\Pages\SamplePages
+
+Download Custom CSS for Playlist demo. Copy the file over ~\ChinookMusic\WebApp\Pages\Shared
+
+On _Layout.cshtml, add this to reference CustomCSS : @RenderSection("CustomCSS", required:false)
+
+Add new menu named Sample Form Controls
+
+Add new lass on View models folder
 	
 	
