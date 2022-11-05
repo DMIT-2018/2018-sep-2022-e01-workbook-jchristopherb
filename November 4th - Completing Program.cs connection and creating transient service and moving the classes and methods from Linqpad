@@ -1,0 +1,51 @@
+Novenber 4th
+Web Form
+Form:
+playlistName [_____] (single instance)
+	[BindProperty]
+	Variable (property)
+
+Doing multiple fields (checkbox)
+	[BindProperty]
+	List<?> => a class (command model)
+		public clss ,,,,
+		{
+			.... referencing the hidden id#, Id#, checkbox
+		}
+		
+==============================================================
+Continuation:
+Set up connection inside Program.cs
+On the Project, each member should have their own builder statement (backend dependency connection) - use subsystem name for your builder name ie[ReceivingBackendDependencies]
+	
+1. Add extension on your ChinookSystem
+	Add class and name it "ChinookExtensions" - an add-on method to existing class (IServiceCollection)
+		- Add #region Additional Namespaces
+		- Change the "internal" to "public static" class
+		- Add your method on the class named "ChinookSystemBackendDependencies"
+		- Add your parameters with variable name services(this IServiceCollection services)
+		- Add your action with variable name options which receive the connection string for your application "Action<DbContextOptionsBuilder> options"
+2. On Program.cs
+	Uncomment the builder method, and add in a using statement to connect the system (using ChinookSystem)
+3. On ChinookExtension.cs
+		- create a Transient Service Class on BLL folder
+			- On BLL folderm create a new class (TrackServices.cs) *singular* and needs to be public
+		- Add TrackServices class to register on ChinookExtensions.cs
+		- Add a constructor for context dependency on TrackServices
+		- Create a PlaylistTrackServices class (copy codes from TrackServices class)
+		- Copy the services. code for TrackServices and change the class name to PlaylistTrackServices
+		- Save all and Rebuild Solution
+
+=======================================================================
+
+1. Grab the TrackSelection method from Linqpad (TrackServices Class) and paste to you TrackServices.cs under #region Queries
+2. Change the IEnumerable<TrackSelection> results = Tracks to "_context.Tracks". Do the same for PlaylistTrackServices.
+3. Add your Services region on PlaylistTrackServices, grab your Command TRX method from linq and paste it in here. 
+	- Change your class name to singular
+	- add "_context." to all queries and dataset
+	- remove "s" to all instance, local variables
+	- add #nullable disable on top of your using statements
+
+	
+	
+	
