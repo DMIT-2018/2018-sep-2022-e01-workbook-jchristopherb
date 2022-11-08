@@ -1,0 +1,12 @@
+November 7th
+- Solution to Exercise 3 discussed
+- Install UX Starter kit of our form
+	1. Download Chinook UX Playlist setup from moodle
+	2. Copy the file and paste on ChinookMusic > WebApp > Pages > SamplePages
+	3. Download paginator from moodle
+	3. On ChinookMusic > WebApp > Add a new folder "Helpers"
+	4. Make some edits on the backend.
+	
+- Add in the OLTP TRX on the menu.
+
+	
