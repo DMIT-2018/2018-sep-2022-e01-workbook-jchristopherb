@@ -1,0 +1,124 @@
+Table footer
+
+                <tfoot>
+                 @*used for summay table information eg totals
+                   used for displaying paging information                                       
+                 *@
+                    <tr>
+                        <td colspan="3">
+                            @{
+                                //the pageRef is the string representation of the
+                                //  the value to be displayed AND it's numeric
+                                //the string maybe be a character line : Next
+                                //the string maybe be a numeric : 4
+                                //  First Previous 1 2 3 4 5 Next Last
+                                foreach(var pageRef in Model.Pager)
+                                {
+                                    if (pageRef == Model.Pager.CurrentPage)
+                                    {
+                                        <b>@pageRef.Text</b>
+                                    }
+                                    else
+                                    {
+                                        //create an anchor tag to move to
+                                        //  the desired collection page
+                                        //the target of the anchor destination
+                                        //  is your current web cshtml
+                                        //this will cause a OnGet issue
+                                        // .Page is the numeric representation
+                                        //      of the desired page
+                                        //for the asp-page your page name reference
+                                        //  MUST be based from the folder name Pages
+                                        <a title="Page @pageRef.Page"
+                                           asp-page="/Samples/PartialFilterSearch"
+                                           asp-route-currentpage="@pageRef.Page">
+                                            @pageRef.Text   
+                                         </a>
+                                    }
+                                }
+                            }
+                        </td>
+                    </tr>
+                </tfoot>
+
+code-behind on PageModel
+
+using WebApp.Helpers;
+
+#region Paginator
+//my desired page size
+private const int PAGE_SIZE = 5;
+//be able to hold an instance of the Paginator
+public Paginator Pager { get; set; }
+#endregion
+
+	public void OnGet(int? currentPage)
+        {
+            //using the Paginator with your query
+
+            //OnGet will have a parameter (Request query string) that receives the
+            //  current page number. On the initial load of the page, this value
+            //  will be null.
+
+            //obtain the data list for the Region dropdownlist (select tag)
+            RegionList = _regionServices.Region_List();
+            if (!string.IsNullOrWhiteSpace(searcharg))
+            {
+                //setting up for using the Paginator only needs to be done if
+                //  a query is executing
+
+                //determine the current page number
+                int pagenumber = currentPage.HasValue ? currentPage.Value : 1;
+                //setup the current state of the paginator (sizing)
+                PageState current = new(pagenumber, PAGE_SIZE);
+                //temporary local integer to hold the results of the query's total collection size
+                //  this will be need by the Paginator during the paginator's execution
+                int totalcount;
+
+                //we need to pass paging data into our query so that efficiencies in the
+                //  system will ONLY return the amount of records to actually be display
+                //  on the browser page.
+
+                TerritoryInfo = _territoryServices.GetByPartialDescription(searcharg,
+                                    pagenumber, PAGE_SIZE, out totalcount);
+
+                //create the needed Pagnator instance
+                Pager = new Paginator(totalcount, current);
+            }
+        }
+
+Service method BLL
+
+        //query by a string
+        //this partial search query has been alter to allow for paging of its results
+        //IF paging is NOT required the the query should have a single string parameter: partialdescription
+
+        public List<Territory> GetByPartialDescription(string partialdescription,
+                                                        int pagenumber,
+                                                        int pagesize,
+                                                        out int totalcount)
+        {
+            IEnumerable<Territory> info = _context.Territories
+                            .Where(x => x.TerritoryDescription.Contains(partialdescription))
+                            .OrderBy(x => x.TerritoryDescription);
+
+            //using the paging parameters to obtain only the necessary rows that
+            //  will be shown by the Paginator
+
+            //determine the total collection size of our query
+            totalcount = info.Count();
+            //determine the number of rows to skip
+            //this skipped count reflects the rows of the previous pages
+            //remember the pagenumber is a natural number (1,2,3,...)
+            //this needs to be treated as an index (natural number - 1)
+            //the number of rows to skip is index * pagesize
+            int skipRows = (pagenumber - 1) * pagesize;
+            //return only the required number of rows.
+            //this will be done using filters belonging to Linq
+            //use the filter .Skip(n) to skip over n rows from the beginning of a collection
+            //use the filter .Take(n) to take the next n rows from a collection
+            return info.Skip(skipRows).Take(pagesize).ToList();
+
+            //this is the return statement that would be used IF no paging is being implemented
+            //return info.ToList();
+        }

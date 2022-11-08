@@ -65,7 +65,7 @@ namespace WebApp.Pages.SamplePages
         public List<PlaylistTrackInfo> qplaylistInfo { get; set; }
 
         [BindProperty]
-        public List<PlaylistMove> cplaylistInfo { get; set; }
+        public List<PlaylistTrackTRX> cplaylistInfo { get; set; }
 
         [BindProperty]
         public int addtrackid { get; set; }
