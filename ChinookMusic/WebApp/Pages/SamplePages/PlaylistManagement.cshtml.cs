@@ -96,7 +96,7 @@ namespace WebApp.Pages.SamplePages
             if (!string.IsNullOrWhiteSpace(playlistname))
             {
                 string username = USERNAME;
-                qplaylistInfo = _playlisttrackServices.PlaylistTrack_Fetch_Playlist(playlistname.Trim(), username);
+                qplaylistInfo = _playlisttrackServices.PlaylistTrack_FetchPlaylist(playlistname.Trim(), username);
             }
         }
         public IActionResult OnPostTrackSearch()
