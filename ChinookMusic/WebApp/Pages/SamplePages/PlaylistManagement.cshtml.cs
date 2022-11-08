@@ -85,7 +85,7 @@ namespace WebApp.Pages.SamplePages
                 int totalcount = 0;
                 int pagenumber = currentpage.HasValue ? currentpage.Value : 1;
                 PageState current = new(pagenumber, PAGE_SIZE);
-                trackInfo = _trackServices.Track_Fetch_TracksBy(searchArg.Trim(),
+                trackInfo = _trackServices.Track_FetchTracksBy(searchArg.Trim(),
                     searchBy.Trim(), pagenumber, PAGE_SIZE, out totalcount);
                 Pager = new(totalcount, current);
             }
