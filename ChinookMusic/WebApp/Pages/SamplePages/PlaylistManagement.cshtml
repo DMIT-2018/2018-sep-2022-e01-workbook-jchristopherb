@@ -46,14 +46,18 @@
             Search pattern
             <input type="text" asp-for="searchArg" />
             <br/>
+            @* Radio type buttons needs to be asp-for="searchBy" for all the options*@
             <input type="radio" asp-for="searchBy" value="Artist"/>&nbsp;&nbsp;Artist
             &nbsp;&nbsp;
             <input type="radio" asp-for="searchBy" value="Album"/>&nbsp;&nbsp;Album
             &nbsp; &nbsp;
+            @* asp-page-handler should match the IActionResult "OnPost_ *@
             <button type="submit" asp-page-handler="TrackSearch"
                title="Fetch tracks">Tracks ?</button>
         </label>
         </form>
+
+        @* Printing out a report *@
         @if(!string.IsNullOrWhiteSpace(Model.searchArg)
              && !string.IsNullOrWhiteSpace(Model.searchBy))
         {
