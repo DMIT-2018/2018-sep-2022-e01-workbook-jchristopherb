@@ -1,0 +1,20 @@
+Nov 14th
+- Intro: Review form last class
+	- On BLL > TrackServices.cs
+	- On BLL > PlaylistTrackServices.cs, we have the Query for Playlist track, the AddTrack Method and the Move_Track
+	
+- Lecture:
+1. Adding line-awesome link on _layout.cshtml
+2. Adding a form on the PlaylistManagement.cshtml
+	- input asp-for="{BindProperty}"
+	- This code will add the icon button for ADD:
+	
+			<form method="post">
+				<input type="hidden" value="@item.TrackId"
+					asp-for="addtrackid">
+				<button type="submit" title="Add this Track"
+					 asp-page-handler="AddTrack">
+				<i class="las la-plus"></i>
+				</button>
+			  </form>
+	- 
