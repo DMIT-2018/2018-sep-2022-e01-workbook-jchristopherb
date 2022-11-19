@@ -210,13 +210,31 @@
 
                            @foreach (var item in Model.qplaylistInfo)
                            {
-                               <tr>
+                                @*
+                                   retain enter values of non-query model fields (from the command collection)
+                                        to assist with error messages
+                                    set up local variables to hold the command data values
+                                    move any existing command collectuin data unto the appropriate values
+                                    NOTE: warning!!! YOU MUST have an instance of your command collection List<T>
+                                        to solve this, add a = new() to the declaration of your command collection.
+                                        this will ensure a command data collection instance exist even if emplty.
+                               *@
+                                bool selectedtrack = false;
+                                string? trackinput = null;
+                                var song = Model.cplaylistInfo.SingleOrDefault(x => x.TrackId == item.TrackId);
+                                if (song != null)
+                                {
+                                    selectedtrack = song.SelectedTrack; // so whatever the value it was
+                                    trackinput = song.TrackInput.ToString();
+                                }
+
+                                <tr>
                                    <td>
                                         <input type="hidden" name="cplaylistinfo.Index"
                                                 value="@item.TrackId">
                                         <input type="hidden" name="cplaylistinfo[@item.TrackId].TrackId"
                                                 value="@item.TrackId"> @* This will hold/Display the data*@
-                                        <input type="checkbox" name="cplaylistinfo[@item.TrackId].SelecctedTrack"
+                                        <input type="checkbox" checked="@selectedtrack" name="cplaylistinfo[@item.TrackId].SelectedTrack"
                                                 value="true">
                                    </td>
                                    <td>
@@ -231,7 +249,8 @@
                                        @TimeSpan.FromMilliseconds(item.Milliseconds).ToString(@"mm\:ss")
                                    </td>
                                    <td>
-                                       <input type="text" class="smallbox" name="cplaylistinfo[@item.TrackId].TrackInput">
+                                       <input type="text" class="smallbox" name="cplaylistinfo[@item.TrackId].TrackInput"
+                                                value="@trackinput">
                                    </td>
                                </tr>
                            }

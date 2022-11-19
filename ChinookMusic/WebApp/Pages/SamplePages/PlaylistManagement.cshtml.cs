@@ -68,8 +68,9 @@ namespace WebApp.Pages.SamplePages
 
         // this property will be tied to the INPUT fields of the web page
         // this list is tied to the table data elements for the playlist
+        // the =new() is REQUIRED to assist in retaining values during the error handling
         [BindProperty]
-        public List<PlaylistTrackTRX> cplaylistInfo { get; set; } // Command Model - since it's two way
+        public List<PlaylistTrackTRX> cplaylistInfo { get; set; } = new(); // Command Model - since it's two way 
 
         // this property is tied to the form input element located on each of the rows of the track table
         // it will hold the trackid one wishes to attempt to add to the playlist
