@@ -249,7 +249,7 @@ namespace WebApp.Pages.SamplePages
                 _playlisttrackServices.PlaylistTrack_RemoveTracks(playlistname, username, cplaylistInfo);
 
                 //success
-                FeedBackMessage = "Tracks habe been removed.";
+                FeedBackMessage = "Track(s) have been removed.";
 
                 return RedirectToPage(new
                 {
@@ -282,6 +282,56 @@ namespace WebApp.Pages.SamplePages
             }
 
         }
+
+        public IActionResult OnPostReOrg()
+        {
+            try
+            {
+                //Add the code to process the list of tracks via the service.
+                if (string.IsNullOrWhiteSpace(playlistname))
+                {
+                    throw new Exception("You need to have a playlist selected first. Enter a playlist name and press Fetch.");
+                }
+
+                string username = USERNAME;
+                //send data to the service
+                _playlisttrackServices.PlaylistTrack_MoveTracks(playlistname, username, cplaylistInfo);
+
+                //success
+                FeedBackMessage = "Track(s) have been reorganized.";
+
+                return RedirectToPage(new
+                {
+                    searchBy = string.IsNullOrWhiteSpace(searchBy) ? " " : searchBy.Trim(),
+                    searchArg = string.IsNullOrWhiteSpace(searchArg) ? " " : searchArg.Trim(),
+                    playlistname = playlistname
+                });
+            }
+            catch (AggregateException ex)
+            {
+
+                ErrorMessage = "Unable to process reorganize tracks";
+                foreach (var error in ex.InnerExceptions)
+                {
+                    ErrorDetails.Add(error.Message);
+
+                }
+                GetTrackInfo();
+                GetPlaylist();
+
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = GetInnerException(ex).Message;
+                GetTrackInfo();
+                GetPlaylist();
+
+                return Page();
+            }
+
+        }
+
 
         private Exception GetInnerException(Exception ex)
         {
