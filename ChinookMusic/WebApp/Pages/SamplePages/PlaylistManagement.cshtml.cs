@@ -62,14 +62,14 @@ namespace WebApp.Pages.SamplePages
         [BindProperty(SupportsGet = true)]
         public string playlistname { get; set; }
 
-        public List<TrackSelection> trackInfo { get; set; }
+        public List<TrackSelection> trackInfo { get; set; } 
 
-        public List<PlaylistTrackInfo> qplaylistInfo { get; set; }
+        public List<PlaylistTrackInfo> qplaylistInfo { get; set; } // Query Model - one way
 
         // this property will be tied to the INPUT fields of the web page
         // this list is tied to the table data elements for the playlist
         [BindProperty]
-        public List<PlaylistTrackTRX> cplaylistInfo { get; set; }
+        public List<PlaylistTrackTRX> cplaylistInfo { get; set; } // Command Model - since it's two way
 
         // this property is tied to the form input element located on each of the rows of the track table
         // it will hold the trackid one wishes to attempt to add to the playlist
@@ -232,6 +232,24 @@ namespace WebApp.Pages.SamplePages
             try
             {
                //Add the code to process the list of tracks via the service.
+               if (string.IsNullOrWhiteSpace(playlistname))
+                {
+                    throw new Exception("You need to have a playlist selected first. Enter a playlist name and press Fetch.");
+                }
+                int oneselection = cplaylistInfo
+                                    .Where(x => x.SelectedTrack)
+                                    .Count();
+                if (oneselection == 0)
+                {
+                    throw new Exception("You first need to select at least one track before pressing remove.");
+                }
+
+                string username = USERNAME;
+                //send data to the service
+                _playlisttrackServices.PlaylistTrack_RemoveTracks(playlistname, username, cplaylistInfo);
+
+                //success
+                FeedBackMessage = "Tracks habe been removed.";
 
                 return RedirectToPage(new
                 {
