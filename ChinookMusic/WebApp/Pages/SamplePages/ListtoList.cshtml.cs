@@ -17,8 +17,8 @@ namespace WebApp.Pages
     {
 
         #region Constructor for services and DI variables
-        private readonly AboutService _aboutservices;
-        public ListtoListModel(AboutService aboutservices)
+        private readonly AboutServices _aboutservices;
+        public ListtoListModel(AboutServices aboutservices)
         {
             _aboutservices = aboutservices;
         }
