@@ -67,7 +67,7 @@ namespace WebApp.Pages
             }
             //needed to regenerate select control
             Warmth = _aboutservices.ColorWarmth();
-            //default is remain on page
+            //default is remain on page if returnDataType is void instead of IActionResult
             //use the data within the lists
 
             return Page();
