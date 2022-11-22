@@ -28,7 +28,7 @@ namespace ChinookSystem.BLL
         #endregion
 
         #region Services
-        public DbVersionInfo GetDbVersion()
+        /*public DbVersionInfo GetDbVersion()
         {
             DbVersionInfo info = _context.DbVersions
                                     .Select(x => new DbVersionInfo
@@ -40,7 +40,7 @@ namespace ChinookSystem.BLL
                                     })
                                     .SingleOrDefault();
             return info;
-        }
+        }*/
 
         public List<NamedColor> ListHMTLColors()
         {
