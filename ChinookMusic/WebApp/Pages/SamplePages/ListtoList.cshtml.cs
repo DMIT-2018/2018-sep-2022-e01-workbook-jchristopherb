@@ -45,7 +45,7 @@ namespace WebApp.Pages
         public string SelectedColor { get; set; }
 
         //will be the warmth list for select
-        [BindProperty]
+        //[BindProperty]
         public List<SelectionList> Warmth { get; set; }
 
         public void OnGet()
@@ -53,7 +53,7 @@ namespace WebApp.Pages
             AvailableColors = _aboutservices.ListHMTLColors();
             Warmth = _aboutservices.ColorWarmth();
         }
-        public void OnPostAddItem()
+        public IActionResult OnPostAddItem()
         {
             // SelectedColor holds the value of the pressed button
             var found = AvailableColors.SingleOrDefault(x => x.Name == SelectedColor);
@@ -69,9 +69,11 @@ namespace WebApp.Pages
             Warmth = _aboutservices.ColorWarmth();
             //default is remain on page
             //use the data within the lists
+
+            return Page();
         }
 
-        public void OnPostRemoveItem()
+        public IActionResult OnPostRemoveItem()
         {
             var found = ColorPallete.SingleOrDefault(x => x.Name == SelectedColor);
             if (found != null)
@@ -80,7 +82,7 @@ namespace WebApp.Pages
                 ColorPallete.Remove(found);
             }
             Warmth = _aboutservices.ColorWarmth();
-
+            return Page();
         }
     }
 }
