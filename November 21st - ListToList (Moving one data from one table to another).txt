@@ -1,0 +1,11 @@
+November 21st
+- Agenda: Moving one data from one page to another page
+			Download the zip file on moodle (List to list on page demo)
+
+- Lecture:
+
+1. Add the service connection on your extension class (ChinookExtension.cs) 
+	-> services.AddTransient<AboutServices>... lines 50
+	
+2. Add ListtoList to the menu.
+3. ListtoList = the query model is eactly the same as the command model. They share the same class.
