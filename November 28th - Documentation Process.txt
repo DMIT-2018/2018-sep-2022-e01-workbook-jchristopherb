@@ -1,0 +1,13 @@
+Pattern for Service Method
+- checked the incoming parameters had values unless available
+	-	 ArgumentNullExceptions
+- collection of business rule violations
+	- check of rule 1
+	- check rule 2 ...
+- staging logic
+	- create instances
+	- staging (add/update/delete)
+	- create a loop if there is a set of records***
+- test errors
+	- Yes: aggregateException
+	- NO: save changes
